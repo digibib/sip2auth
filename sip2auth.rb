@@ -1,19 +1,12 @@
 #!/usr/bin/env ruby
-
-# Simple script for making library card authorization using the SIP2 protocol.
-# By Petter Goksøyr Åsen
-# Deichmanske Bibliotek 2012
-#
-# based on work by Eli Fulkerson (www.elifulkerson.com/projects/librarystuff.php)
-#
-# version 0.1 
+# encoding: UTF-8
 
 require "socket"
 require "time"
 
 class Client
-	# Initialize with hostname (or ip adress) and port of the sip2-server
 	def initialize(host, port)
+		# hostname (or ip adress) and port of the sip2-server
 		@host, @port = host, port
 	end
 
