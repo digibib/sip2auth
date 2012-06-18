@@ -61,10 +61,11 @@ msg += "\r"
 
 sip2client = Client.new(host, port)
 result = sip2client.send_message msg
-result.force_encoding("CP850").encode("UTF-8")
+#result.force_encoding("CP850").encode("UTF-8")
 #TODO check encoding of result, æøå => ?
-puts result
-puts "æøå"
+#puts result
+
+
 cardnr = result.match /(?<=\|AA)(.*?)(?=\|)/
 authorized = result.match /(?<=\|CQ)(.)(?=\|)/
 bdate = result.match /(?<=\|PB)(.*?)(?=\|)/
