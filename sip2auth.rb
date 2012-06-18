@@ -39,7 +39,7 @@ end
 
 def formMessage(cardnr, pin)
   code = "63"
-  language = "001"
+  language = "012" # Norwegian - check SIP2 manual for other language codes
   timestamp = Time.now.strftime("%Y%m%d    %H%M%S")
   summary = " " * 10
   msg = code + language + timestamp + summary + "AO|AA" + cardnr + "|AC|AD" + pin + "|AY1AZ"
@@ -61,14 +61,17 @@ msg += "\r"
 
 sip2client = Client.new(host, port)
 result = sip2client.send_message msg
-result.force_encoding("ISO-8859-1").encode("UTF-8")
-#TODO check encoding, æøå => ?
-
+result.force_encoding("CP850").encode("UTF-8")
+#TODO check encoding of result, æøå => ?
+puts result
+puts "æøå"
 cardnr = result.match /(?<=\|AA)(.*?)(?=\|)/
 authorized = result.match /(?<=\|CQ)(.)(?=\|)/
 bdate = result.match /(?<=\|PB)(.*?)(?=\|)/
+name = result.match /(?<=\|AE)(.*?)(?=\|)/
 
 puts "---------------------"
+puts "Name:      " + name[0]
 puts "Cardnr:    " + cardnr[0]
 puts "Athorized: " + authorized[0]
 puts "Age:       " + (Time.now.year - bdate[0][0,4].to_i).to_s
