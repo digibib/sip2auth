@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# encoding: UTF-8
+# encoding: CP850
 
 require "socket"
 require "time"
@@ -61,13 +61,7 @@ msg += "\r"
 
 sip2client = Client.new(host, port)
 result = sip2client.send_message msg
-#result.force_encoding("ASCII-8BIT").encode("CP850")
-
-#puts result.encoding.name
-#TODO check encoding of result, æøå => ?
-#puts result.valid_encoding?
-puts result
-
+result.force_encoding("CP850").encode!("UTF-8")
 
 cardnr = result.match /(?<=\|AA)(.*?)(?=\|)/
 authorized = result.match /(?<=\|CQ)(.)(?=\|)/
