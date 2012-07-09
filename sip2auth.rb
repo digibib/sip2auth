@@ -61,9 +61,12 @@ msg += "\r"
 
 sip2client = Client.new(host, port)
 result = sip2client.send_message msg
-#result.force_encoding("CP850").encode("UTF-8")
+#result.force_encoding("ASCII-8BIT").encode("CP850")
+
+#puts result.encoding.name
 #TODO check encoding of result, æøå => ?
-#puts result
+#puts result.valid_encoding?
+puts result
 
 
 cardnr = result.match /(?<=\|AA)(.*?)(?=\|)/
@@ -71,10 +74,15 @@ authorized = result.match /(?<=\|CQ)(.)(?=\|)/
 bdate = result.match /(?<=\|PB)(.*?)(?=\|)/
 name = result.match /(?<=\|AE)(.*?)(?=\|)/
 
+now = Time.now.utc.to_date
+dob = Time.strptime(bdate[0], "%Y-%m-%d")
+age = now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
+
 puts "---------------------"
 puts "Name:      " + name[0]
 puts "Cardnr:    " + cardnr[0]
 puts "Athorized: " + authorized[0]
-puts "Age:       " + (Time.now.year - bdate[0][0,4].to_i).to_s
+puts "Age:       " + age.to_s
+
 
 #TODO: test if cardnr nonexistant
